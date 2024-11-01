@@ -14,11 +14,19 @@ function App() {
             const Page = route.component;
 
             return route.children ? (
-              <Route key={index} path={route.path} element={<Layout><Page /></Layout>}>
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              >
                 {route.children.map((child, childIndex) => (
-                  <Route 
-                    key={childIndex} 
-                    path={child.path} 
+                  <Route
+                    key={childIndex}
+                    path={child.path}
                     element={<child.component />}
                   />
                 ))}
@@ -38,19 +46,18 @@ function App() {
         </Routes>
       </div>
       <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          />
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </Router>
-    
   );
 }
 

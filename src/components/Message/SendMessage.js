@@ -21,6 +21,13 @@ function SendMessage({ departmentId }) {
             console.error("Error sending message:", error);
         }
     };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            handleSendMessage();
+        }
+    };
     return (
         <div className="box-submit-message">
             <div className="hr-bot"></div>
@@ -32,6 +39,7 @@ function SendMessage({ departmentId }) {
                         placeholder="Nhập tin nhắn..."
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
+                        onKeyDown={handleKeyDown}
                     />
                 </div>
                 <div className="select">

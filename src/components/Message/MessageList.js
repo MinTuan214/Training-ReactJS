@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getMessage } from "../../services/messageService";
 
 function MessageList({ departmentId }) {
   const [messageList, setMessageList] = useState([]);
   const id = localStorage.getItem("id");
+  const scrollRef = useRef(null);
 
   const fetchMessage = async () => {
     try {
@@ -18,11 +19,19 @@ function MessageList({ departmentId }) {
     if (departmentId) {
       fetchMessage();
       const intervalId = setInterval(() => {
-        fetchMessage(); 
+        fetchMessage();
       }, 1000);
       return () => clearInterval(intervalId);
     }
   }, [departmentId]);
+
+  
+  useEffect(() => {
+    // Chỉ cuộn đến phần tử cuối cùng một lần sau khi dữ liệu được tải
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: "auto", block: "end" });
+    }
+  }, [messageList]);
 
   return (
     <div className="write-message">
@@ -34,11 +43,17 @@ function MessageList({ departmentId }) {
                 <span className="time"></span>
                 <p>{message.content}</p>
               </div>
-              <img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png" alt="MinhTuan" />
+              <img
+                src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"
+                alt="MinhTuan"
+              />
             </div>
           ) : (
             <div key={index} className="message received">
-              <img src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png" alt="" />
+              <img
+                src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png"
+                alt=""
+              />
               <div className="message-content">
                 <span className="time"></span>
                 <p>{message.content}</p>
@@ -46,6 +61,8 @@ function MessageList({ departmentId }) {
             </div>
           )
         )}
+      <div ref={scrollRef} />
+
       </div>
     </div>
   );

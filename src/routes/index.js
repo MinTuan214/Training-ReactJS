@@ -8,16 +8,12 @@ const publicRoutes = [
   { path: "/", component: Login, layout: null },
   { path: "/register", component: Register, layout: null },
   { path: "/departments", component: Department },
-  { 
-    path: "/messages", 
-    component: Message, 
-    children: [
-      { path: ":departmentId/department", component: MessageList }
-    ] 
+  {
+    path: "/messages",
+    component: Message,
+    children: [{ path: ":departmentId/department", component: MessageList }],
   },
 ];
-
-
 
 const privateRoutes = [];
 
