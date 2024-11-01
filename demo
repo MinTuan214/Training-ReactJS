@@ -1,22 +1,22 @@
 import "./Message.css";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDepartments } from "../../services/messageService";
-import MessageList from "../../components/Message/MessageList";
 import SendMessage from "../../components/Message/SendMessage";
+import MessageList from "../../components/Message/MessageList";
+import { getDepartments } from "../../services/messageService";
 import { toast } from "react-toastify";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 function Message() {
   const navigate = useNavigate();
-  const { departmentId } = useParams();
   const [departments, setDepartments] = useState([]);
-  const [activeDepartment, setActiveDepartment] = useState(
-    departmentId || null
-  );
+  const [activeDepartment, setActiveDepartment] = useState(null);
+  const [messageList, setMessageList] = useState(false);
   const [nameMessage, setNameMessage] = useState(null);
-  const [viewDefault, setViewDefault] = useState(!departmentId);
+  const [viewDefaul, setViewDefaul] = useState(true);
 
-  const username = localStorage.getItem("username");
+  const username = localStorage.getItem("username");  
 
   const fetchDepartments = async () => {
     try {
@@ -27,13 +27,6 @@ function Message() {
     }
   };
 
-  const handleUserClick = (name, id) => {
-    setNameMessage(name);
-    setActiveDepartment(id);
-    setViewDefault(false);
-    navigate(`/messages/${id}/department`);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
@@ -42,20 +35,24 @@ function Message() {
     toast.success("Đăng xuất thành công!");
   };
 
+  const handleUserClick = (name, index) => {
+    setNameMessage(name)
+    setActiveDepartment(index);
+    setViewDefaul(false);
+    setMessageList(true);
+  };
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+    }
+  });
+
   useEffect(() => {
     fetchDepartments();
   }, []);
 
-  useEffect(() => {
-    if (departmentId) {
-      setActiveDepartment(departmentId);
-      setViewDefault(false);
-      const selectedDepartment = departments.find(
-        (dept) => dept._id === departmentId
-      );
-      setNameMessage(selectedDepartment ? selectedDepartment.department_name : null);
-    }
-  }, [departmentId, departments]);
 
   return (
     <div id="main">
@@ -73,7 +70,6 @@ function Message() {
             <i className="fa-solid fa-circle-exclamation"></i>
           </div>
         </div>
-
         <div className="box-right">
           <div className="nav-top">
             <div className="nav-top-left">
@@ -100,14 +96,13 @@ function Message() {
           <div className="content">
             <div className="box-list-user">
               {departments.map((department, index) => (
-                <div
-                  key={index}
-                  className={`content-message ${
+            
+                <Link 
+                  className={content-message ${
                     activeDepartment === department._id ? "active" : ""
-                  }`}
-                  onClick={() =>
-                    handleUserClick(department.department_name, department._id)
-                  }
+                  }}
+                  key={index}
+                  onClick={() => handleUserClick(department.department_name, department._id)}
                 >
                   <div className="left">
                     <div className="avatar">
@@ -129,11 +124,12 @@ function Message() {
                       <p>12:35</p>
                     </div>
                   </div>
-                </div>
+                </Link>
+
+             
               ))}
             </div>
-
-            {activeDepartment ? (
+            {activeDepartment && (
               <div className="box-chat-user">
                 <div className="user-texting">
                   <div className="info-user">
@@ -157,21 +153,22 @@ function Message() {
                 </div>
                 <div className="hr-top"></div>
                 <div className="content-text">
-                  <MessageList departmentId={activeDepartment} />
+        
+                  <MessageList departmentId={activeDepartment}/>
                   <SendMessage departmentId={activeDepartment} />
+
                 </div>
               </div>
-            ) : (
-              viewDefault && (
-                <div className="box-defautl">
-                  <h2>Welcome to CHAT - MT</h2>
-                  <p>
-                    Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng
-                    người thân, bạn bè được tối ưu hoá cho máy tính của bạn.
-                  </p>
-                  <img src="assets/images/group.png" alt="" />
-                </div>
-              )
+            )}
+            {viewDefaul && (
+              <div className="box-defautl">
+                <h2>Welcome to CHAT - MT</h2>
+                <p>
+                  Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng người
+                  thân, bạn bè được tối ưu hoá cho máy tính của bạn.
+                </p>
+                <img src="assets/images/group.png" alt="" />
+              </div>
             )}
           </div>
         </div>

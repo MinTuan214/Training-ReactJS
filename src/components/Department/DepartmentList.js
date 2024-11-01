@@ -8,9 +8,9 @@ function DepartmentList({ departments }) {
     console.log(department);
   };
 
-  const handleDelete = async (department) => {
-    console.log(department);
-  };
+  // const handleDelete = async (department) => {
+  //   console.log(department);
+  // };
 
   const openDeleteModal = () => setIsDeleteModalOpen(true);
   const closeDeleteModal = () => setIsDeleteModalOpen(false);

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { addDepartment } from "../../services/departmentService";
 import { toast } from "react-toastify";
-import images from "../../assets/images";
 
 function DepartmentModal({
   isAddModalOpen,
@@ -13,13 +12,15 @@ function DepartmentModal({
   users,
 }) {
   const [departmentName, setDepartmentName] = useState("");
+  const [selectUser, setSelectUser] = useState("");
 
-  const handleSubmit = async () => {
-    const res = await addDepartment(departmentName);
+  const handleAddDepartment = async () => {
+    const res = await addDepartment(departmentName, selectUser);
 
     if (res) {
       closeAddModal();
       setDepartmentName("");
+      setSelectUser("");
       fetchDepartments();
       toast.success("Thêm mới thành công!");
     } else {
@@ -80,16 +81,22 @@ function DepartmentModal({
                     </div>
                     <div className="select-users">
                       <label htmlFor="#">Select users</label>
-                      <select name="select-users" id="select-users">
+                      <select
+                        name="select-users"
+                        id="select-users"
+                        onChange={(e) => setSelectUser(e.target.value)}
+                      >
                         {users.map((user, index) => (
-                          <option key={index}>{user.name}</option>
+                          <option key={index} value={user._id}>
+                            {user.name}
+                          </option>
                         ))}
                       </select>
                     </div>
                   </div>
                   <div className="upload-avatar">
                     <div className="show-image">
-                      <img src={images.bg} alt="" />
+                      <img src="assets/images/notfound.png" alt="" />
                       <label
                         htmlFor="file-upload"
                         className="custom-file-upload"
@@ -101,7 +108,10 @@ function DepartmentModal({
                   </div>
 
                   <div className="btn-add-user">
-                    <Link className="btn add btn-submit" onClick={handleSubmit}>
+                    <Link
+                      className="btn add btn-submit"
+                      onClick={handleAddDepartment}
+                    >
                       + Add new department
                     </Link>
                     <Link href="#" className="btn reset">

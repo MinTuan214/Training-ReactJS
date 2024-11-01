@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Register } from "../../services/authService";
 import { toast } from "react-toastify";
+import InputField from "../Common/InputField";
+import Button from "../Common/Button";
 
 function RegisterForm() {
   const [name, setName] = useState("");
@@ -23,71 +25,58 @@ function RegisterForm() {
       toast.success("Đăng ký thành công!");
     }
     setLoadingData(false);
-
   };
 
   return (
     <div className="wrapper">
-      <div className="form-control username">
-        <label htmlFor="name">
-          <i className="fa-solid fa-user"></i>
-        </label>
-        <input
-          type="text"
-          id="name"
-          className="text-control name"
-          placeholder="Username"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
-      <div className="form-control username">
-        <label htmlFor="name">
-          <i className="fa-solid fa-envelope"></i>
-        </label>
-        <input
-          type="text"
-          id="email"
-          className="text-control name"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-      <div className="form-control username">
-        <label htmlFor="name">
-          <i className="fa-solid fa-phone-volume"></i>
-        </label>
-        <input
-          type="text"
-          id="phone"
-          className="text-control name"
-          placeholder="Phone number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-      </div>
-      <div className="form-control password">
-        <label htmlFor="password">
-          <i className="fa-solid fa-lock"></i>
-        </label>
-        <input
-          type="password"
-          id="password"
-          className="text-control pass"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <p className="eye">
-          <i className="fa-solid fa-eye-slash"></i>
-        </p>
-      </div>
-      <div className="btn-login">
-        <button className="btn-register" onClick={handleRegister}>
-          {loadingData && <i className="fas fa-sync fa-spin"></i>} Register
-        </button>
-      </div>
+      <InputField
+        classBlock="username"
+        className="name"
+        id="name"
+        iconClass="fa-user"
+        type="text"
+        placeholder="Username"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <InputField
+        classBlock="email"
+        className="email"
+        id="email"
+        iconClass="fa-envelope"
+        type="text"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <InputField
+        classBlock="phone"
+        className="phone"
+        id="phone"
+        iconClass="fa-phone-volume"
+        type="text"
+        placeholder="Phone number"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+      />
+      <InputField
+        classBlock="password"
+        className="pass"
+        id="password"
+        iconClass="fa-lock"
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        showEyeIcon={true}
+      />
+      <Button
+        className="btn-register"
+        iconClass="fas fa-sync fa-spin"
+        onClick={handleRegister}
+        loadingData={loadingData}
+        btnName="Register"
+      />
     </div>
   );
 }

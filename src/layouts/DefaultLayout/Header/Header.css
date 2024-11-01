@@ -1,0 +1,25 @@
+@import "../../../variables.css";
+
+.header {
+  background-color: #fff;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px,
+    rgba(0, 0, 0, 0.05) 0px 5px 10px;
+}
+
+.header a {
+  padding: 8px 12px;
+  margin: 10px 0;
+  text-decoration: none;
+  color: var(--primary-text-color);
+  border-radius: 3px;
+  transition: all .2s linear;
+}
+.header a:hover {
+  background: linear-gradient(-135deg, #4158d0, #c850c0);
+  color: #fff;
+}

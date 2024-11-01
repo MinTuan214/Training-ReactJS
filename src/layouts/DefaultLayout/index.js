@@ -1,11 +1,15 @@
-import './DefaultLayout.css';
+import "./DefaultLayout.css";
+import Header from "./Header";
 
-function DefaultLayout() {
-    return ( 
-        <div className="wrapper">
-            <h2>DefaultLayout</h2>
-        </div>
-     );
+function DefaultLayout({ children }) {
+  return (
+    <div className="wrapper">
+    <Header />
+      <div className="container-main">
+        <div>{children}</div>
+      </div>
+    </div>
+  );
 }
 
 export default DefaultLayout;

@@ -6,43 +6,44 @@ import DepartmentList from "../../components/Department/DepartmentList";
 import { getDepartments, getUsers } from "../../services/departmentService";
 import { toast } from "react-toastify";
 
-
 function Department() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [departments, setDepartments] = useState([]);
-  const [users, setUsers] = useState('');
+  const [users, setUsers] = useState("");
   const navigate = useNavigate();
-
+  const username = localStorage.getItem("username");
 
   const fetchDepartments = async () => {
     try {
-        const data = await getDepartments();
-        setDepartments(data);
+      const data = await getDepartments();
+      setDepartments(data);
     } catch (error) {
-        console.error("Failed to fetch departments", error);
+      console.error("Failed to fetch departments", error);
     }
-  }
+  };
 
   const fetchUser = async () => {
     try {
-        const user = await getUsers();
-        setUsers(user)
+      const user = await getUsers();
+      setUsers(user);
     } catch (error) {
       console.error("Failed to get users", error);
     }
-  }
+  };
 
   const handleLogout = () => {
-      localStorage.removeItem("token");
-      navigate("/");
-      toast.success('Đăng xuất thành công!')
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("id");
+    navigate("/");
+    toast.success("Đăng xuất thành công!");
   };
 
   useEffect(() => {
     let token = localStorage.getItem("token");
-    if(!token){
-      navigate('/');
+    if (!token) {
+      navigate("/");
     }
   });
 
@@ -54,21 +55,17 @@ function Department() {
   const openAddModal = () => setIsAddModalOpen(true);
   const closeAddModal = () => setIsAddModalOpen(false);
 
-  const openDeleteModal = () => setIsDeleteModalOpen(true);
+  // const openDeleteModal = () => setIsDeleteModalOpen(true);
   const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
   return (
-    <div id="main-crud">
+    <div id="main">
       <div className="container">
         <div className="box-top">
           <div className="title">
             <h2>
-              List departments: <span id="list-of"></span>
+              List departments: <span id="list-of">{username}</span>
             </h2>
-            <Link to="/messages">
-              <i className="fa-solid fa-comment"></i> Chat
-              <i className="fa-solid fa-right-from-bracket"></i>
-            </Link>
           </div>
           <hr className="new1" />
           <div className="all-action">
@@ -94,8 +91,7 @@ function Department() {
           </div>
         </div>
 
-        <DepartmentList departments={departments}/>
-
+        <DepartmentList departments={departments} />
       </div>
 
       <DepartmentModal
@@ -103,7 +99,7 @@ function Department() {
         closeAddModal={closeAddModal}
         isDeleteModalOpen={isDeleteModalOpen}
         closeDeleteModal={closeDeleteModal}
-        fetchDepartments={fetchDepartments} 
+        fetchDepartments={fetchDepartments}
         users={users}
       />
     </div>

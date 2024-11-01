@@ -1,26 +1,41 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
-import { publicRoutes } from './routes';
-import { ToastContainer } from 'react-toastify';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { publicRoutes } from "./routes";
+import DefaultLayout from "./layouts/DefaultLayout";
+import { Fragment } from "react";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
     <Router>
       <div className="App">
-          <Routes>
-            {publicRoutes.map((route, index) => {
-                const Page = route.component;
-                return (
-                  <Route
-                    key={index}
-                    path={route.path}
-                    element={
-                      <Page/>
-                    }
+        <Routes>
+          {publicRoutes.map((route, index) => {
+            const Layout = route.layout === null ? Fragment : DefaultLayout;
+            const Page = route.component;
+
+            return route.children ? (
+              <Route key={index} path={route.path} element={<Layout><Page /></Layout>}>
+                {route.children.map((child, childIndex) => (
+                  <Route 
+                    key={childIndex} 
+                    path={child.path} 
+                    element={<child.component />}
                   />
-                );
-            })}
-          </Routes>
+                ))}
+              </Route>
+            ) : (
+              <Route
+                key={index}
+                path={route.path}
+                element={
+                  <Layout>
+                    <Page />
+                  </Layout>
+                }
+              />
+            );
+          })}
+        </Routes>
       </div>
       <ToastContainer
           position="top-right"

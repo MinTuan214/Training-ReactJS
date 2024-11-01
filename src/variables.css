@@ -1,0 +1,40 @@
+:root {
+  /* background */
+  --primary-background: linear-gradient(-135deg, #4158d0, #c850c0);
+  --blur-background: #f2f7fab3;
+  --background-list-user: #4158d0;
+  --background-th: #f9fafb;
+  --background-modal: #fff;
+  --background-platform: linear-gradient(135deg, #4158d0, #c850c0) no-repeat;
+
+  /* text */
+  --primary-text-color: #333;
+  --primary-title-color: -webkit-linear-gradient(135deg, #4158d0, #c850c0) no-repeat;
+  --text-color-in-button: #fff;
+  --placeholder-color: #bbb9b9;
+
+  /* border */
+  --border-color: #c4c4c4;
+  --border-input: #c4bebe;
+
+  /* shadow */
+  --primary-shadow-color: rgba(0, 0, 0, 0.15) 0px 15px 25px,
+    rgba(0, 0, 0, 0.05) 0px 5px 10px;
+  --second-shadow-color: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+
+  /* button */
+  --primary-button-color: linear-gradient(-135deg, #4158d0, #c850c0);
+  --button-destroy-color: #f32a2a;
+  --button-edit-color: #c850c0;
+  --button-detail-color: #4158d0;
+  --button-close-color: #ccc;
+
+  /* icon */
+  --icon-color: #fff;
+  --icon-label-color: #4158d0;
+
+  /* Hover */
+  --primary-button-color-hover: linear-gradient(135deg, #c850c0, #4158d0) no-repeat;
+  --icon-color-hover: #333;
+  --button-destroy-color-hover: #720c0c;
+}
