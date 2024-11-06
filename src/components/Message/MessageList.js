@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { getMessage } from "../../services/messageService";
+import { useParams } from "react-router-dom";
 
-function MessageList({ departmentId }) {
+function MessageList() {
   const [messageList, setMessageList] = useState([]);
   const id = localStorage.getItem("id");
   const scrollRef = useRef(null);
+  const { departmentId } = useParams();
 
   const fetchMessage = async () => {
     try {
@@ -25,9 +27,7 @@ function MessageList({ departmentId }) {
     }
   }, [departmentId]);
 
-  
   useEffect(() => {
-    // Chỉ cuộn đến phần tử cuối cùng một lần sau khi dữ liệu được tải
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "auto", block: "end" });
     }
@@ -61,8 +61,7 @@ function MessageList({ departmentId }) {
             </div>
           )
         )}
-      <div ref={scrollRef} />
-
+        <div ref={scrollRef} />
       </div>
     </div>
   );

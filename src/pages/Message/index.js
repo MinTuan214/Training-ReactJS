@@ -1,10 +1,9 @@
 import "./Message.css";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDepartments } from "../../services/messageService";
-import MessageList from "../../components/Message/MessageList";
-import SendMessage from "../../components/Message/SendMessage";
 import { toast } from "react-toastify";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
+import { getDepartments } from "../../services/messageService";
+import SendMessage from "../../components/Message/SendMessage";
 
 function Message() {
   const navigate = useNavigate();
@@ -53,7 +52,9 @@ function Message() {
       const selectedDepartment = departments.find(
         (dept) => dept._id === departmentId
       );
-      setNameMessage(selectedDepartment ? selectedDepartment.department_name : null);
+      setNameMessage(
+        selectedDepartment ? selectedDepartment.department_name : null
+      );
     }
   }, [departmentId, departments]);
 
@@ -157,7 +158,7 @@ function Message() {
                 </div>
                 <div className="hr-top"></div>
                 <div className="content-text">
-                  <MessageList departmentId={activeDepartment} />
+                  <Outlet />
                   <SendMessage departmentId={activeDepartment} />
                 </div>
               </div>
