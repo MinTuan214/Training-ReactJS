@@ -1,28 +1,20 @@
-import { useEffect, useRef, useState } from "react";
-import { getMessage } from "../../services/messageService";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useRef } from "react";
+import { AppContext } from "../../context/AppContext";
+import { MessageContext } from "../../context/MessageContext";
 
 function MessageList() {
-  const [messageList, setMessageList] = useState([]);
-  const id = localStorage.getItem("id");
-  const scrollRef = useRef(null);
-  const { departmentId } = useParams();
+  const { userId } = useContext(AppContext);
+  const { departmentId, fetchMessage, messageList } =
+    useContext(MessageContext);
 
-  const fetchMessage = async () => {
-    try {
-      const data = await getMessage(departmentId);
-      setMessageList(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     if (departmentId) {
       fetchMessage();
       const intervalId = setInterval(() => {
         fetchMessage();
-      }, 1000);
+      }, 5000);
       return () => clearInterval(intervalId);
     }
   }, [departmentId]);
@@ -37,7 +29,7 @@ function MessageList() {
     <div className="write-message">
       <div className="chat-messages">
         {messageList.map((message, index) =>
-          message.user_id._id === id ? (
+          message.user_id._id === userId ? (
             <div key={index} className="message sent">
               <div className="message-content">
                 <span className="time"></span>

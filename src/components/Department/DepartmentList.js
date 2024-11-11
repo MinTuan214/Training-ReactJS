@@ -1,19 +1,10 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { DepartmentContext } from "../../context/DepartmentContext";
 
-function DepartmentList({ departments }) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-  const handleUpdate = async (department) => {
-    console.log(department);
-  };
-
-  // const handleDelete = async (department) => {
-  //   console.log(department);
-  // };
-
-  const openDeleteModal = () => setIsDeleteModalOpen(true);
-  const closeDeleteModal = () => setIsDeleteModalOpen(false);
+function DepartmentList() {
+  const { departments, openDeleteModal, isDeleteModalOpen, closeDeleteModal } =
+    useContext(DepartmentContext);
 
   return (
     <div className="box-bot">
@@ -28,32 +19,30 @@ function DepartmentList({ departments }) {
           </tr>
         </thead>
         <tbody id="listDepartment">
-          {departments.map((department, index) => (
-            <tr key={index}>
-              <td>
-                <input type="checkbox" />
-              </td>
-              <td>{department.department_name}</td>
-              <td>{department.title}</td>
-              <td>{department.userId}</td>
-              <td className="action">
-                <Link to="#">
-                  <i className="fa-solid fa-eye"></i>
-                </Link>
-                |
-                <Link
-                  className="btn-edit"
-                  onClick={() => handleUpdate(department)}
-                >
-                  <i className="fa-solid fa-pen-to-square"></i>
-                </Link>
-                |
-                <Link className="btn-delete" onClick={openDeleteModal}>
-                  <i className="fa-solid fa-trash-can"></i>
-                </Link>
-              </td>
-            </tr>
-          ))}
+          {departments &&
+            departments.map((department, index) => (
+              <tr key={index}>
+                <td>
+                  <input type="checkbox" />
+                </td>
+                <td>{department.department_name}</td>
+                <td>{department.title}</td>
+                <td>{department.userId}</td>
+                <td className="action">
+                  <Link to="#">
+                    <i className="fa-solid fa-eye"></i>
+                  </Link>
+                  |
+                  <Link className="btn-edit">
+                    <i className="fa-solid fa-pen-to-square"></i>
+                  </Link>
+                  |
+                  <Link className="btn-delete" onClick={openDeleteModal}>
+                    <i className="fa-solid fa-trash-can"></i>
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       {/* Modal Xác Nhận Xóa */}

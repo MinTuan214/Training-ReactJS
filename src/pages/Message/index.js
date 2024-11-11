@@ -1,62 +1,19 @@
 import "./Message.css";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { getDepartments } from "../../services/messageService";
+import { useContext } from "react";
+import { Outlet } from "react-router-dom";
 import SendMessage from "../../components/Message/SendMessage";
+import { AppContext } from "../../context/AppContext";
+import { MessageContext } from "../../context/MessageContext";
 
 function Message() {
-  const navigate = useNavigate();
-  const { departmentId } = useParams();
-  const [departments, setDepartments] = useState([]);
-  const [activeDepartment, setActiveDepartment] = useState(
-    departmentId || null
-  );
-  const [nameMessage, setNameMessage] = useState(null);
-  const [viewDefault, setViewDefault] = useState(!departmentId);
-
-  const username = localStorage.getItem("username");
-
-  const fetchDepartments = async () => {
-    try {
-      const response = await getDepartments();
-      setDepartments(response);
-    } catch (error) {
-      console.error("Error fetching departments:", error);
-    }
-  };
-
-  const handleUserClick = (name, id) => {
-    setNameMessage(name);
-    setActiveDepartment(id);
-    setViewDefault(false);
-    navigate(`/messages/${id}/department`);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("id");
-    navigate("/");
-    toast.success("Đăng xuất thành công!");
-  };
-
-  useEffect(() => {
-    fetchDepartments();
-  }, []);
-
-  useEffect(() => {
-    if (departmentId) {
-      setActiveDepartment(departmentId);
-      setViewDefault(false);
-      const selectedDepartment = departments.find(
-        (dept) => dept._id === departmentId
-      );
-      setNameMessage(
-        selectedDepartment ? selectedDepartment.department_name : null
-      );
-    }
-  }, [departmentId, departments]);
+  const { handleLogout, username } = useContext(AppContext);
+  const {
+    departments,
+    activeDepartment,
+    handleUserClick,
+    nameMessage,
+    viewDefault,
+  } = useContext(MessageContext);
 
   return (
     <div id="main">
@@ -159,7 +116,7 @@ function Message() {
                 <div className="hr-top"></div>
                 <div className="content-text">
                   <Outlet />
-                  <SendMessage departmentId={activeDepartment} />
+                  <SendMessage />
                 </div>
               </div>
             ) : (

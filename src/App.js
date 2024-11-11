@@ -6,7 +6,9 @@ import Department from "./pages/Department";
 import Message from "./pages/Message";
 import MessageList from "./components/Message/MessageList";
 import DefaultLayout from "./layouts/DefaultLayout";
-
+import { DepartmentProvider } from "./context/DepartmentContext";
+import { AppProvider } from "./context/AppContext";
+import { MessageProvider } from "./context/MessageContext";
 
 function App() {
   return (
@@ -15,9 +17,29 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route element={<DefaultLayout />}>
-            <Route path="/departments" element={<Department />} />
-            <Route path="/messages" element={<Message />}>
+          <Route
+            element={
+              <AppProvider>
+                <DefaultLayout />
+              </AppProvider>
+            }
+          >
+            <Route
+              path="/departments"
+              element={
+                <DepartmentProvider>
+                  <Department />
+                </DepartmentProvider>
+              }
+            />
+            <Route
+              path="/messages"
+              element={
+                <MessageProvider>
+                  <Message />
+                </MessageProvider>
+              }
+            >
               <Route
                 path=":departmentId/department"
                 element={<MessageList />}

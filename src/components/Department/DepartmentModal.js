@@ -1,16 +1,18 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { addDepartment } from "../../services/departmentService";
 import { toast } from "react-toastify";
+import { DepartmentContext } from "../../context/DepartmentContext";
 
-function DepartmentModal({
-  isAddModalOpen,
-  closeAddModal,
-  isDeleteModalOpen,
-  closeDeleteModal,
-  fetchDepartments,
-  users,
-}) {
+function DepartmentModal() {
+  const {
+    isAddModalOpen,
+    closeAddModal,
+    isDeleteModalOpen,
+    closeDeleteModal,
+    fetchDepartments,
+    users,
+  } = useContext(DepartmentContext);
   const [departmentName, setDepartmentName] = useState("");
   const [selectUser, setSelectUser] = useState("");
 

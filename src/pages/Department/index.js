@@ -1,44 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import "./Department.css";
 import DepartmentModal from "../../components/Department/DepartmentModal";
 import DepartmentList from "../../components/Department/DepartmentList";
-import { getDepartments, getUsers } from "../../services/departmentService";
-import { toast } from "react-toastify";
+import { DepartmentContext } from "../../context/DepartmentContext";
+import { AppContext } from "../../context/AppContext";
 
 function Department() {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [departments, setDepartments] = useState([]);
-  const [users, setUsers] = useState("");
+  const { handleLogout, username } = useContext(AppContext);
+  const { openAddModal } = useContext(DepartmentContext);
+
   const navigate = useNavigate();
-  const username = localStorage.getItem("username");
-
-  const fetchDepartments = async () => {
-    try {
-      const data = await getDepartments();
-      setDepartments(data);
-    } catch (error) {
-      console.error("Failed to fetch departments", error);
-    }
-  };
-
-  const fetchUser = async () => {
-    try {
-      const user = await getUsers();
-      setUsers(user);
-    } catch (error) {
-      console.error("Failed to get users", error);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    localStorage.removeItem("id");
-    navigate("/");
-    toast.success("Đăng xuất thành công!");
-  };
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -46,17 +18,6 @@ function Department() {
       navigate("/");
     }
   });
-
-  useEffect(() => {
-    fetchDepartments();
-    fetchUser();
-  }, []);
-
-  const openAddModal = () => setIsAddModalOpen(true);
-  const closeAddModal = () => setIsAddModalOpen(false);
-
-  // const openDeleteModal = () => setIsDeleteModalOpen(true);
-  const closeDeleteModal = () => setIsDeleteModalOpen(false);
 
   return (
     <div id="main">
@@ -91,17 +52,10 @@ function Department() {
           </div>
         </div>
 
-        <DepartmentList departments={departments} />
+        <DepartmentList />
       </div>
 
-      <DepartmentModal
-        isAddModalOpen={isAddModalOpen}
-        closeAddModal={closeAddModal}
-        isDeleteModalOpen={isDeleteModalOpen}
-        closeDeleteModal={closeDeleteModal}
-        fetchDepartments={fetchDepartments}
-        users={users}
-      />
+      <DepartmentModal />
     </div>
   );
 }
