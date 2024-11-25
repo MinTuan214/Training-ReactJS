@@ -1,19 +1,20 @@
-import { useContext, useEffect, useRef } from "react";
-import { AppContext } from "../../context/AppContext";
-import { MessageContext } from "../../context/MessageContext";
-
+import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
+import { fetchMessage } from "../../redux/messageSlice";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 function MessageList() {
-  const { userId } = useContext(AppContext);
-  const { departmentId, fetchMessage, messageList } =
-    useContext(MessageContext);
-
+  const { userId } = useSelector((state) => state.app);
+  const { messageList } = useSelector((state) => state.message);
+  const dispatch = useDispatch();
+  const {departmentId} = useParams();
   const scrollRef = useRef(null);
 
   useEffect(() => {
     if (departmentId) {
-      fetchMessage();
+      dispatch(fetchMessage(departmentId));
       const intervalId = setInterval(() => {
-        fetchMessage();
+        dispatch(fetchMessage(departmentId));
       }, 5000);
       return () => clearInterval(intervalId);
     }
@@ -28,7 +29,8 @@ function MessageList() {
   return (
     <div className="write-message">
       <div className="chat-messages">
-        {messageList.map((message, index) =>
+        {messageList && 
+          messageList.map((message, index) =>
           message.user_id._id === userId ? (
             <div key={index} className="message sent">
               <div className="message-content">

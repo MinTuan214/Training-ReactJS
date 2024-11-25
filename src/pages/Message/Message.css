@@ -424,6 +424,10 @@
   background-color: var(--status-dot-color);
 }
 
+.name-message .status .dot.off {
+  background-color: #ddd;
+}
+
 #main .container-mess .box-right .content .box-chat-user .user-texting .action {
   display: flex;
   align-items: end;

@@ -1,19 +1,80 @@
 import "./Message.css";
-import { useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate, useParams, useLocation } from "react-router-dom";
 import SendMessage from "../../components/Message/SendMessage";
-import { AppContext } from "../../context/AppContext";
-import { MessageContext } from "../../context/MessageContext";
+import { sendMessage } from "../../services/messageService";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/appSlice";
+import { setActiveDepartment } from "../../redux/messageSlice";
+import { fetchDepartments } from "../../redux/messageSlice";
 
 function Message() {
-  const { handleLogout, username } = useContext(AppContext);
-  const {
-    departments,
-    activeDepartment,
-    handleUserClick,
-    nameMessage,
-    viewDefault,
-  } = useContext(MessageContext);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { departmentId } = useParams();
+
+  const { username, userId } = useSelector((state) => state.app);
+  const { departments, activeDepartment, nameMessage } = useSelector(
+    (state) => state.message
+  );
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
+  const handleUserClick = (name, id) => {
+    dispatch(setActiveDepartment({ name, id }));
+    navigate(`/messages/${id}/department`);
+  };
+
+  const [isOnline, setIsOnline] = useState(false);
+
+  const handleSendMessageBye = async () => {
+    if (activeDepartment && userId) {
+      try {
+        await sendMessage(activeDepartment, "Đã offline!", userId);
+      } catch (error) {
+        console.error("Gửi tin nhắn thất bại:", error);
+      }
+    }
+  };
+  useEffect(() => {
+    if (!departmentId) {
+      dispatch(setActiveDepartment({ name: null, id: null }));
+    } else {
+      const selectedDepartment = departments.find(
+        (dept) => dept._id === departmentId
+      );
+      if (selectedDepartment) {
+        dispatch(
+          setActiveDepartment({
+            name: selectedDepartment.department_name,
+            id: departmentId,
+          })
+        );
+      }
+    }
+  }, [departmentId, departments, dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchDepartments());
+  }, []);
+
+  useEffect(() => {
+    if (location.pathname.includes("messages")) {
+      setIsOnline(true);
+    } else {
+      setIsOnline(false);
+    }
+
+    return () => {
+      if (activeDepartment) {
+        handleSendMessageBye();
+      }
+    };
+  }, [location, activeDepartment]);
 
   return (
     <div id="main">
@@ -76,9 +137,10 @@ function Message() {
                     </div>
                     <div className="name-message">
                       <span className="name">{department.department_name}</span>
+
                       <p className="status">
-                        Online
-                        <span className="dot"></span>
+                        {isOnline ? "Online" : "Offline"}
+                        <span className={`dot ${isOnline ? "" : "off"}`}></span>
                       </p>
                     </div>
                   </div>
@@ -120,16 +182,14 @@ function Message() {
                 </div>
               </div>
             ) : (
-              viewDefault && (
-                <div className="box-defautl">
-                  <h2>Welcome to CHAT - MT</h2>
-                  <p>
-                    Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng
-                    người thân, bạn bè được tối ưu hoá cho máy tính của bạn.
-                  </p>
-                  <img src="assets/images/group.png" alt="" />
-                </div>
-              )
+              <div className="box-defautl">
+                <h2>Welcome to CHAT - MT</h2>
+                <p>
+                  Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng
+                  người thân, bạn bè được tối ưu hoá cho máy tính của bạn.
+                </p>
+                <img src="assets/images/group.png" alt="" />
+              </div>
             )}
           </div>
         </div>

@@ -1,29 +1,30 @@
 import { Link } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useState, useEffect } from "react";
 import { addDepartment } from "../../services/departmentService";
 import { toast } from "react-toastify";
-import { DepartmentContext } from "../../context/DepartmentContext";
+import { useDispatch, useSelector } from "react-redux";
+import { closeAddModal, closeDeleteModal, fetchUsers} from "../../redux/departmentSlice";
+import { fetchDepartments } from "../../redux/departmentSlice";
 
 function DepartmentModal() {
-  const {
-    isAddModalOpen,
-    closeAddModal,
-    isDeleteModalOpen,
-    closeDeleteModal,
-    fetchDepartments,
-    users,
-  } = useContext(DepartmentContext);
+  const dispatch = useDispatch();
   const [departmentName, setDepartmentName] = useState("");
   const [selectUser, setSelectUser] = useState("");
-
+  const { isDeleteModalOpen, isAddModalOpen, users} = useSelector(
+    (state) => state.department
+  );    
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch])  
+  
   const handleAddDepartment = async () => {
     const res = await addDepartment(departmentName, selectUser);
 
     if (res) {
-      closeAddModal();
+      dispatch(closeAddModal());
       setDepartmentName("");
       setSelectUser("");
-      fetchDepartments();
+      dispatch(fetchDepartments());
       toast.success("Thêm mới thành công!");
     } else {
       toast.error("Add department error!");
@@ -57,10 +58,13 @@ function DepartmentModal() {
 
       {/* Modal Thêm Phòng Ban */}
       {isAddModalOpen && (
-        <div className="modal-add" onClick={closeAddModal}>
+        <div className="modal-add" onClick={() => dispatch(closeAddModal())}>
           <div className="form-add" onClick={(e) => e.stopPropagation()}>
             <div className="form">
-              <div className="close-modal" onClick={closeAddModal}>
+              <div
+                className="close-modal"
+                onClick={() => dispatch(closeAddModal())}
+              >
                 <i className="fa-solid fa-xmark"></i>
               </div>
               <div className="title">

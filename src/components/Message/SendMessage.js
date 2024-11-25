@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { sendMessage } from "../../services/messageService";
-import { useContext, useState } from "react";
-import { AppContext } from "../../context/AppContext";
-import { MessageContext } from "../../context/MessageContext";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function SendMessage() {
-  const { userId } = useContext(AppContext);
-  const { activeDepartment } = useContext(MessageContext);
+  const { userId } = useSelector((state) => state.app);
+
+  const { activeDepartment } = useSelector((state) => state.message);
 
   const [content, setContent] = useState("");
 
