@@ -182,7 +182,7 @@ function Message() {
                 </div>
               </div>
             ) : (
-              <div className="box-defautl">
+              <div className="box-default">
                 <h2>Welcome to CHAT - MT</h2>
                 <p>
                   Khám phá những tiện ích hỗ trợ làm việc và trò chuyện cùng

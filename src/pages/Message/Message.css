@@ -288,7 +288,7 @@
   flex-direction: column;
 }
 
-#main .container-mess .box-right .content .box-defautl {
+#main .container-mess .box-right .content .box-default {
   display: flex;
   flex: 2;
   padding: 20px 30px;
@@ -297,19 +297,19 @@
   justify-content: center;
 }
 
-#main .container-mess .box-right .content .box-defautl h2 {
+#main .container-mess .box-right .content .box-default h2 {
   padding: 10px 0;
   font-weight: 500;
   font-size: 20px;
 }
 
-#main .container-mess .box-right .content .box-defautl p {
+#main .container-mess .box-right .content .box-default p {
   width: 400px;
   text-align: center;
   font-size: 14px;
 }
 
-#main .container-mess .box-right .content .box-defautl img {
+#main .container-mess .box-right .content .box-default img {
   width: 250px;
   height: 250px;
   object-fit: cover;
