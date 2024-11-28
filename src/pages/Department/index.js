@@ -16,7 +16,6 @@ function Department() {
 
   const handleLogout = () => {
     dispatch(logout());
-    
     navigate("/");
   };
 

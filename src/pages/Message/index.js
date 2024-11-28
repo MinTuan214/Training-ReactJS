@@ -34,7 +34,7 @@ function Message() {
   const handleSendMessageBye = async () => {
     if (activeDepartment && userId) {
       try {
-        await sendMessage(activeDepartment, "Đã offline!", userId);
+        await sendMessage(activeDepartment, "Bye bye!", userId);
       } catch (error) {
         console.error("Gửi tin nhắn thất bại:", error);
       }
